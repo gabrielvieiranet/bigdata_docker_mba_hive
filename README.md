@@ -11,3 +11,5 @@ hive -f /mba-scripts/exemplo.hql
 ```
 
 hive-server --> executa script de insercao 
+
+teste igor
