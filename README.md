@@ -90,5 +90,5 @@ E finalizando, vamos trazer uma consulta com a relação de pessoas e serviços.
   * Uma tabela com dados para seguimentação e analíse dos clientes.
   
 Evidência da consulta relacionando pessoas com os serviços consumidos    
-![imagem relacionada a pessoas e serviços](/images/consulta-pessoas-servicos.jpeg)
+![imagem relacionada a pessoas e serviços](/files/consulta-pessoas-servicos.jpeg)
 
