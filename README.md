@@ -4,7 +4,7 @@
 O objetivo da atividade é dividido em duas partes:
   #### Primeira parte:
   * Carregar os dados no HDFS os arquivos que estão localizados no diretório: [Trabalho HIVE](https://drive.google.com/drive/folders/1OfZTSYcgcun-S7UFNVAzbcr0-PzlEc08);
-  * Criar um database no HIVE com o nome AdventureWorks
+  * Criar um database no HIVE com o nome AdventureWorks;
   * Consultar dados sobre Pessoas e “serviços” consumidos;
   * Criar uma tabela com a visão dos tipos de serviço/Aventura contratados agregados;
   * Criar uma tabela com dados para seguimentação e analíse dos clients;
@@ -26,14 +26,58 @@ O processo é divido em 4 scripts:
 
 ## EXECUÇÃO (Como rodar a proposta)
 Vamos executar o primeiro script __0-setup.sh__, no qual sua funcionalidade é: 
-  * Cria a estrutura de diretórios no HDFS ```
-    ```shell dk-exec-namenode 'hadoop fs -rm -R /mba-data'
+  * Cria a estrutura de diretórios no HDFS 
+    ```shell 
+    dk-exec-namenode 'hadoop fs -mkdir -p /mba-data/sor'     # raw data
+    dk-exec-namenode 'hadoop fs -mkdir -p /mba-data/sot'     # treated data
+    dk-exec-namenode 'hadoop fs -mkdir -p /mba-data/spec'    # visions
+    ```
   * Copiar os arquivos CSV para dentro do diretório local no NAMENODE
+    ```shell 
+    dk-exec-namenode 'rm -rf /mba-data'
+    docker cp ./files/hadoop namenode:/mba-data
+    ```
   * Copiar os arquivos CSV do NAMENODE para os diretórios criados no HDFS
+    ```shell 
+    dk-exec-namenode 'hadoop fs -put -p /mba-data/* /mba-data/sor'
+    ```
   * Criar o database AventureWorks
+    ```shell 
+    dk-exec-hive 'hive -f /mba-scripts/setup.hql'
+    ```
 
+Em seguida, vamos executar o script __1-sor.sh__:
 
+  * HADOOP - mover os arquivos:
+    ```shell 
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_address'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_customer'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_customeraddress'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_product'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_productcategory'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_productdescription'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_productmodel'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_productmodeldescription'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_salesorderdetail'
+    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_salesorderhead'
 
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/address.csv /mba-data/sor/tb_sor_address/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/customer.csv /mba-data/sor/tb_sor_customer/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/customeraddress.csv /mba-data/sor/tb_sor_customeraddress/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/product.csv /mba-data/sor/tb_sor_product/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/productcategory.csv /mba-data/sor/tb_sor_productcategory/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/productdescription.csv /mba-data/sor/tb_sor_productdescription/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/productmodel.csv /mba-data/sor/tb_sor_productmodel/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/productmodeldescription.csv /mba-data/sor/tb_sor_productmodeldescription/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/salesorderdetail.csv /mba-data/sor/tb_sor_salesorderdetail/000000_0'
+    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/salesorderhead.csv /mba-data/sor/tb_sor_salesorderhead/000000_0'
+    ```
+
+  * HIVE - Criar as tabelas no database
+    ```shell
+    dk-exec-hive 'hive -f /mba-scripts/sor.hql'
+    ```
+    
 ## NOSSA IDEA 
 Trabalho sobre Hive
 
