@@ -7,7 +7,7 @@ O objetivo da atividade é dividido em duas partes:
   * Criar um database no HIVE com o nome AdventureWorks;
   * Consultar dados sobre Pessoas e “serviços” consumidos;
   * Criar uma tabela com a visão dos tipos de serviço/Aventura contratados agregados;
-  * Criar uma tabela com dados para seguimentação e analíse dos clients;
+  * Criar uma tabela com dados para seguimentação e analíse dos clientes;
   
   #### Segunda parte:
   * Modelar uma flattened table com os KPIS que nosso grupo decidiu como essênciais para monitoramento do negócio, pensando no ponto de vista de venda/contratação.
@@ -73,12 +73,24 @@ Em seguida, vamos executar o script __1-sor.sh__:
     dk-exec-nodename 'hadoop fs -mv /mba-data/sor/salesorderhead.csv /mba-data/sor/tb_sor_salesorderhead/000000_0'
     ```
 
-  * HIVE - Criar as tabelas no database
+  * HIVE - Criar as tabelas dos arquivos exportados para o HDFS no database
     ```shell
     dk-exec-hive 'hive -f /mba-scripts/sor.hql'
     ```
     
-## NOSSA IDEA 
+Próximo passo, vamos executar o script __2-sot.sh__ no qual executamos a parte 2 da atividade. Criamos uma flattened table com os KPIS que entendemos como essênciais para o negócio:
+
+  * Vamos criar o flattened table:
+    ```shell
+    dk-exec-hive 'hive -f /mba-scripts/sot.hql'
+    ```
+    
+E finalizando, vamos trazer uma consulta com a relação de pessoas e serviços. Também será criado duas novas tabelas:
+  * Uma tabela com a visão dos tipos de serviço/Aventura contratados agregados.
+  * Uma tabela com dados para seguimentação e analíse dos clientes.
+  
+
+## RESULTADOS 
 Trabalho sobre Hive
 
 namenode --> executa script de mover arquivos CSV para dentro do HDFS
@@ -91,4 +103,3 @@ hive -f /mba-scripts/exemplo.hql
 
 hive-server --> executa script de insercao 
 
-teste igor
