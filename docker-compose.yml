@@ -1,6 +1,6 @@
 version: '3'
 services:
-
+  
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
     container_name: namenode
@@ -12,10 +12,6 @@ services:
       - ./config/hadoop-hive.env
     ports:
       - "50070:50070"
-    deploy:
-      resources:
-        limits:
-          memory: 500m
 
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
@@ -30,10 +26,6 @@ services:
       - namenode
     ports:
       - "50075:50075"
-    deploy:
-      resources:
-        limits:
-          memory: 500m      
 
   hive-server:
     image: bde2020/hive:2.3.2-postgresql-metastore
@@ -49,10 +41,6 @@ services:
       - hive-metastore
     ports:
       - "10000:10000"
-    deploy:
-      resources:
-        limits:
-          memory: 500m
 
   hive-metastore:
     image: bde2020/hive:2.3.2-postgresql-metastore
@@ -66,10 +54,6 @@ services:
       - hive-metastore-postgresql
     ports:
       - "9083:9083"
-    deploy:
-      resources:
-        limits:
-          memory: 500m
 
   hive-metastore-postgresql:
     image: bde2020/hive-metastore-postgresql:2.3.0
@@ -78,7 +62,3 @@ services:
       - ./data/metastore-postgresql/postgresql/data:/var/lib/postgresql/data
     depends_on:
       - datanode
-    deploy:
-      resources:
-        limits:
-          memory: 500m
