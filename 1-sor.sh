@@ -46,3 +46,4 @@ dk-exec-nodename 'hadoop fs -mv /mba-data/sor/salesorderhead.csv /mba-data/sor/t
 
 # HIVE - CREATE TABLES
 dk-exec-hive 'hive -f /mba-scripts/sor.hql'
+ 
