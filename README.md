@@ -89,17 +89,6 @@ E finalizando, vamos trazer uma consulta com a relação de pessoas e serviços.
   * Uma tabela com a visão dos tipos de serviço/Aventura contratados agregados.
   * Uma tabela com dados para seguimentação e analíse dos clientes.
   
-
-## RESULTADOS 
-Trabalho sobre Hive
-
-namenode --> executa script de mover arquivos CSV para dentro do HDFS
-
-hive-server --> executa script de criacao de tabelas
-
-```
-hive -f /mba-scripts/exemplo.hql
-```
-
-hive-server --> executa script de insercao 
+Evidência da consulta relacionando pessoas com os serviços consumidos    
+![imagem relacionada a pessoas e serviços](/images/consulta-pessoas-servicos.jpeg)
 
