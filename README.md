@@ -78,6 +78,8 @@ Em seguida, vamos executar o script __1-sor.sh__:
     dk-exec-hive 'hive -f /mba-scripts/sor.hql'
     ```
     
+    __Informação adicional__: Criamos um diagrama para melhor identificação das tabelas: [Diagramas das tabelas](https://dbdiagram.io/d/64582ec1dca9fb07c4a90b21)
+    
 Próximo passo, vamos executar o script __2-sot.sh__ no qual executamos a parte 2 da atividade. Criamos uma flattened table com os KPIS que entendemos como essênciais para o negócio:
 
   * Vamos criar o flattened table:
