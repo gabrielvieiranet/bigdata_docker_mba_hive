@@ -89,6 +89,6 @@ E finalizando, vamos trazer uma consulta com a relação de pessoas e serviços.
   * Uma tabela com a visão dos tipos de serviço/Aventura contratados agregados.
   * Uma tabela com dados para seguimentação e analíse dos clientes.
   
-Evidência da consulta relacionando pessoas com os serviços consumidos    
+Evidência da consulta relacionando pessoas com os serviços consumidos:
 ![imagem relacionada a pessoas e serviços](/files/consulta-pessoas-servicos.jpeg)
 
