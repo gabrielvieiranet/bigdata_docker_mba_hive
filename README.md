@@ -45,6 +45,7 @@ Vamos executar o primeiro script __0-setup.sh__, no qual sua funcionalidade é:
     ```shell 
     dk-exec-hive 'hive -f /mba-scripts/setup.hql'
     ```
+    [documento com as informações do banco e tabela](/files/images/create-database-tables.docx)
 
 Em seguida, vamos executar o script __1-sor.sh__:
 
