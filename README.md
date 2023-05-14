@@ -1,97 +1,91 @@
 # BIGDATA DOCKER MBA HIVE
 
 ## OBJETIVO 
-O objetivo da atividade é dividido em duas partes:
-  #### Primeira parte:
-  * Carregar os dados no HDFS os arquivos que estão localizados no diretório: [Trabalho HIVE](https://drive.google.com/drive/folders/1OfZTSYcgcun-S7UFNVAzbcr0-PzlEc08);
-  * Criar um database no HIVE com o nome AdventureWorks;
-  * Consultar dados sobre Pessoas e “serviços” consumidos;
-  * Criar uma tabela com a visão dos tipos de serviço/Aventura contratados agregados;
-  * Criar uma tabela com dados para seguimentação e analíse dos clientes;
-  
-  #### Segunda parte:
-  * Modelar uma flattened table com os KPIS que nosso grupo decidiu como essênciais para monitoramento do negócio, pensando no ponto de vista de venda/contratação.
+Este repositório tem como objetivo exercitar atividades relacionadas à aula sobre Hive realizada em sala de aula durante o MBA de Engenharia de Dados, disciplina Distributed Data Processing & Storage na FIAP em 2023.
 
 ## PROPOSTA
-Decidimos então rodar em etapas (macro scripts) com objetivo de dividir ainda mais a atividade e facilidando o melhor entendimento na execução/documentação da atividade. 
-
-O processo é divido em 4 scripts: 
-```shell
-0-setup.sh
-1-sor.sh
-2-sot.sh
-3-spec.sh
-```
-
+A ideia desta atividade é dividida em duas partes:
+  ### Primeira parte:
+  * Carregar os arquivos que foram disponibilizados pelo professor em sala de aula (```/files/hadoop/*.csv```) no HDFS;
+  * Criar um database no HIVE com o nome AdventureWorks;
+  * Consultar dados sobre Pessoas e “serviços” consumidos;
+  * Criar uma tabela com a visão dos tipos de *Serviço*/ *Aventura* contratados agregados;
+  * Criar uma tabela com dados para segmentação e análise dos clientes;
+  
+  ### Segunda parte:
+  * Modelar uma flattened table com os *KPIs* que nosso grupo decidiu como essenciais para monitoramento do negócio, pensando no ponto de vista de venda/contratação.
 
 ## EXECUÇÃO (Como rodar a proposta)
-Vamos executar o primeiro script __0-setup.sh__, no qual sua funcionalidade é: 
-  * Cria a estrutura de diretórios no HDFS 
-    ```shell 
-    dk-exec-namenode 'hadoop fs -mkdir -p /mba-data/sor'     # raw data
-    dk-exec-namenode 'hadoop fs -mkdir -p /mba-data/sot'     # treated data
-    dk-exec-namenode 'hadoop fs -mkdir -p /mba-data/spec'    # visions
-    ```
-  * Copiar os arquivos CSV para dentro do diretório local no NAMENODE
-    ```shell 
-    dk-exec-namenode 'rm -rf /mba-data'
-    docker cp ./files/hadoop namenode:/mba-data
-    ```
-  * Copiar os arquivos CSV do NAMENODE para os diretórios criados no HDFS
-    ```shell 
-    dk-exec-namenode 'hadoop fs -put -p /mba-data/* /mba-data/sor'
-    ```
-  * Criar o database AventureWorks
-    ```shell 
-    dk-exec-hive 'hive -f /mba-scripts/setup.hql'
-    ```
-    [documento com os prints da criação do banco e tabelas](/files/images/create-database-tables.docx)
 
-Em seguida, vamos executar o script __1-sor.sh__:
+Antes de tudo, você precisa ter o [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e inicializado.
 
-  * HADOOP - mover os arquivos:
-    ```shell 
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_address'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_customer'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_customeraddress'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_product'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_productcategory'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_productdescription'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_productmodel'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_productmodeldescription'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_salesorderdetail'
-    dk-exec-nodename 'hadoop fs -mkdir -p /mba-data/sor/tb_sor_salesorderhead'
+Para iniciar o ambiente *Hadoop + Hive* em Docker execute o comando abaixo, de preferência em um terminal shell:
 
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/address.csv /mba-data/sor/tb_sor_address/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/customer.csv /mba-data/sor/tb_sor_customer/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/customeraddress.csv /mba-data/sor/tb_sor_customeraddress/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/product.csv /mba-data/sor/tb_sor_product/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/productcategory.csv /mba-data/sor/tb_sor_productcategory/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/productdescription.csv /mba-data/sor/tb_sor_productdescription/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/productmodel.csv /mba-data/sor/tb_sor_productmodel/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/productmodeldescription.csv /mba-data/sor/tb_sor_productmodeldescription/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/salesorderdetail.csv /mba-data/sor/tb_sor_salesorderdetail/000000_0'
-    dk-exec-nodename 'hadoop fs -mv /mba-data/sor/salesorderhead.csv /mba-data/sor/tb_sor_salesorderhead/000000_0'
-    ```
+```shell
+docker compose up -d
+```
 
-  * HIVE - Criar as tabelas dos arquivos exportados para o HDFS no database
-    ```shell
-    dk-exec-hive 'hive -f /mba-scripts/sor.hql'
-    ```
+O processo seguinte é divido em 4 scripts para facilitar o entendimento e execução em etapas:
+```shell
+0-setup.sh  # prepara ambiente (reset)
+1-sor.sh    # carrega dados crus (as-is)
+2-sot.sh    # faz tratamentos e agregações
+3-spec.sh   # carrega visões especializadas
+```
+
+### 0 - SETUP / RESET DO AMBIENTE
+O script abaixo serve para criar a estrutura de diretórios no HDFS, copiar os arquivos e criar database no Hive:
+
+```shell
+. ./0-setup.sh
+```
+Para dar um reset no ambiente (arquivos e database), basta executar esse script novamente.
+
+__Atenção__, este script apaga o database e recria do zero!
+
+### 1 - CAMADA SOR - SOURCE OF RECORD
+
+Em seguida criamos um script para criar as tabelas de dados crus no Hive:
+```shell
+. ./1-sor.sh
+```
+No fim, devemos ter todas as tabelas carregadas no Hive:
+
+![Tabelas Raw](files/images/tabelas_sor.jpg)
+
+Problemas encontrados:
+  1. Cada arquivo representava uma entidade no diagrama que foi fornecido porém o modelo estava complexo e não refletia 100% as entidades.
+  Para resolver este problema, criamos um novo diagrama mais simplificado que nos ajudou a ter mais clareza da estrutura dos dados. Você pode acessá-lo
+  [aqui](https://dbdiagram.io/d/64582ec1dca9fb07c4a90b21).
+  ![Diagrama](files/images/diagrama.png)
+  2. Os arquivos são CSV com colunas separadas por *ponto e vírgula (;)*, porém alguns arquivos apresentaram problemas como por exemplo *productmodel.csv*, que na coluna *CatalogDescription* possui um texto xml com quebras de linha e *ponto e vírgula (;)* no meio do texto:
+  ![Diagrama](files/images/ponto_virgula.jpg)
+   Para tentar resolver este problema, criamos uma *Regular Expression* que identifica o padrão do texto, porém não conseguimos aplicar na criação da tabela no Hive:
+   ![Diagrama](files/images/regex.jpg)
+   Em uma aplicação no mundo real, talvez criaríamos um processo de limpeza dos dados antes de chegar no data lake. Como esta coluna não afeta nosso estudo, fizemos uma importação simples.
+ 
+### 2 - CAMADA SOT - SOURCE OF TRUTH
+
+Na próxima etapa, criamos algumas *flattened tables* (vulgo *tabelão*) para organizar as dimensões baseadas nos clientes, serviços e vendas. Execute o script abaixo para criar as tabelas:
+```shell
+. ./2-sot.sh
+```
+
+TODO:
+ * Criar uma tabela com a visão dos tipos de *Serviço*/ *Aventura* contratados agregados;
+ * Criar uma tabela com dados para segmentação e analise dos clientes
+ * Segregação dos dados
     
-    __Informação adicional__: Criamos um diagrama para melhor identificação das tabelas: [Diagrama das tabelas](https://dbdiagram.io/d/64582ec1dca9fb07c4a90b21)
-    
-Próximo passo, vamos executar o script __2-sot.sh__ no qual executamos a parte 2 da atividade. Criamos uma flattened table com os KPIS que entendemos como essênciais para o negócio:
+### 2 - CAMADA SPEC - VISÕES ESPECIALIZADAS
 
-  * Vamos criar o flattened table:
-    ```shell
-    dk-exec-hive 'hive -f /mba-scripts/sot.hql'
-    ```
-    
-E finalizando, vamos trazer uma consulta com a relação de pessoas e serviços. Também será criado duas novas tabelas:
+E finalizando, o último script cria algumas visões relacionadas ao que foi proposto e o que achamos interessante durante a avaliação dos dados:
+```shell
+. ./3-spec.sh
+```
+
   * Uma tabela com a visão dos tipos de serviço/Aventura contratados agregados.
-  * Uma tabela com dados para seguimentação e analíse dos clientes.
+  * Uma tabela com dados para segmentação e analíse dos clientes.
   
 Evidência da consulta relacionando pessoas com os serviços consumidos:
-![imagem relacionada a pessoas e serviços](/files/consulta-pessoas-servicos.jpeg)
+![imagem relacionada a pessoas e serviços](/files/images/consulta-pessoas-servicos.jpeg)
 
