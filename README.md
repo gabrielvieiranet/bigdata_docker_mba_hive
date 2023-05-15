@@ -70,12 +70,19 @@ Na próxima etapa, criamos algumas *flattened tables* (vulgo *tabelão*) para or
 ```shell
 . ./2-sot.sh
 ```
+Separamos os dados em 3 tabelas:
 
-TODO:
- * Criar uma tabela com a visão dos tipos de *Serviço*/ *Aventura* contratados agregados;
- * Criar uma tabela com dados para segmentação e analise dos clientes
- * Segregação dos dados
-    
+```shell
+tb_sot_clients_flat   # dados de clientes
+tb_sot_products_flat  # dados de produtos / serviços
+tb_sot_orders_flat    # dados de vendas
+```
+Problemas encontrados:
+  1. Ao tentar criar uma tabela com a visão de *Serviço*/ *Aventura* contratados agregados, não encontramos qualquer atributo relevante que mostrasse a descrição de qualquer produto. De qualquer forma, agrupamos todos os dados relevantes de produtos na tabela *tb_sot_products_flat*.
+  2. É possível saber por exemplo, que os produtos estão divididos em 4 categorias principais, porém também não possuem descrição.
+  3. Ao tentar criar uma tabela para análise de clientes, não encontramos atributo que identificasse uma pessoa física ou contato, apenas o nome da empresa.
+  4. Cerca de metade dos clientes não possui endereço no cadastro.
+
 ### 2 - CAMADA SPEC - VISÕES ESPECIALIZADAS
 
 E finalizando, o último script cria algumas visões relacionadas ao que foi proposto e o que achamos interessante durante a avaliação dos dados:
@@ -83,9 +90,9 @@ E finalizando, o último script cria algumas visões relacionadas ao que foi pro
 . ./3-spec.sh
 ```
 
-  * Uma tabela com a visão dos tipos de serviço/Aventura contratados agregados.
-  * Uma tabela com dados para segmentação e analíse dos clientes.
-  
-Evidência da consulta relacionando pessoas com os serviços consumidos:
-![imagem relacionada a pessoas e serviços](/files/images/consulta-pessoas-servicos.jpeg)
+```shell
+tb_spec_orders_by_salesperson   # vendas por vendedor
+tb_spec_orders_by_customer      # vendas por cliente
+tb_spec_orders_by_product       # vendas por produto
+```
 
